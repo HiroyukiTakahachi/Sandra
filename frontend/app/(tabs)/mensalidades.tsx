@@ -73,57 +73,76 @@ export default function MensalidadesScreen() {
     setTotalRecebido(total);
   };
 
-  const handleMarcarPago = async (mensalidade: Mensalidade) => {
-    console.log('handleMarcarPago chamado', mensalidade);
-    
+  const handleMarcarPago = (mensalidade: Mensalidade) => {
     if (mensalidade.pago) {
-      Alert.alert('Atenção', 'Esta mensalidade já foi paga');
+      if (Platform.OS === 'web') {
+        alert('Esta mensalidade já foi paga');
+      } else {
+        Alert.alert('Atenção', 'Esta mensalidade já foi paga');
+      }
       return;
     }
 
-    Alert.alert(
-      'Confirmar Pagamento',
-      `Confirmar pagamento de ${mensalidade.aluno_nome}?\nValor: R$ ${mensalidade.valor.toFixed(2)}`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Confirmar',
-          onPress: async () => {
-            try {
-              console.log('Enviando pagamento para API:', {
-                aluno_id: mensalidade.aluno_id,
-                mes_ano: mesAtual,
-                url: `${API_URL}/api/mensalidades/pagar`
-              });
-              
-              const response = await fetch(`${API_URL}/api/mensalidades/pagar`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  aluno_id: mensalidade.aluno_id,
-                  mes_ano: mesAtual,
-                }),
-              });
+    setSelectedMensalidade(mensalidade);
+    setShowConfirmModal(true);
+  };
 
-              console.log('Resposta da API:', response.status, response.ok);
-              
-              if (response.ok) {
-                const result = await response.json();
-                console.log('Resultado:', result);
-                Alert.alert('Sucesso', 'Pagamento registrado');
-                fetchMensalidades();
-              } else {
-                const errorData = await response.json().catch(() => ({}));
-                console.error('Erro na resposta:', errorData);
-                Alert.alert('Erro', 'Não foi possível registrar o pagamento');
-              }
-            } catch (error) {
-              Alert.alert('Erro', 'Não foi possível registrar o pagamento');
-            }
-          },
-        },
-      ]
-    );
+  const confirmarPagamento = async () => {
+    if (!selectedMensalidade) return;
+
+    setProcessando(true);
+    try {
+      console.log('Enviando pagamento para API:', {
+        aluno_id: selectedMensalidade.aluno_id,
+        mes_ano: mesAtual,
+        url: `${API_URL}/api/mensalidades/pagar`
+      });
+      
+      const response = await fetch(`${API_URL}/api/mensalidades/pagar`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          aluno_id: selectedMensalidade.aluno_id,
+          mes_ano: mesAtual,
+        }),
+      });
+
+      console.log('Resposta da API:', response.status, response.ok);
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Resultado:', result);
+        setShowConfirmModal(false);
+        setSelectedMensalidade(null);
+        
+        if (Platform.OS === 'web') {
+          alert('Pagamento registrado com sucesso!');
+        } else {
+          Alert.alert('Sucesso', 'Pagamento registrado');
+        }
+        
+        fetchMensalidades();
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Erro na resposta:', errorData);
+        
+        if (Platform.OS === 'web') {
+          alert('Não foi possível registrar o pagamento');
+        } else {
+          Alert.alert('Erro', 'Não foi possível registrar o pagamento');
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao processar pagamento:', error);
+      
+      if (Platform.OS === 'web') {
+        alert('Não foi possível registrar o pagamento');
+      } else {
+        Alert.alert('Erro', 'Não foi possível registrar o pagamento');
+      }
+    } finally {
+      setProcessando(false);
+    }
   };
 
   const mudarMes = (direcao: 'anterior' | 'proximo') => {
