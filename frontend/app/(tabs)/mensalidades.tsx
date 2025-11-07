@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Modal,
+  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
@@ -29,6 +31,9 @@ export default function MensalidadesScreen() {
   const [loading, setLoading] = useState(true);
   const [totalRecebido, setTotalRecebido] = useState(0);
   const [mesAtual, setMesAtual] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedMensalidade, setSelectedMensalidade] = useState<Mensalidade | null>(null);
+  const [processando, setProcessando] = useState(false);
 
   useEffect(() => {
     // Definir mês atual no formato YYYY-MM
