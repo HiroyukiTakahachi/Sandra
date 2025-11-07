@@ -241,6 +241,54 @@ export default function MensalidadesScreen() {
         <Text style={styles.totalLabel}>Total Recebido:</Text>
         <Text style={styles.totalValue}>R$ {totalRecebido.toFixed(2)}</Text>
       </View>
+
+      {/* Modal de Confirmação */}
+      <Modal
+        visible={showConfirmModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowConfirmModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <MaterialCommunityIcons name="cash-check" size={64} color="#00BCD4" />
+            
+            <Text style={styles.modalTitle}>Confirmar Pagamento</Text>
+            
+            {selectedMensalidade && (
+              <View style={styles.modalInfo}>
+                <Text style={styles.modalAluno}>{selectedMensalidade.aluno_nome}</Text>
+                <Text style={styles.modalValor}>
+                  R$ {selectedMensalidade.valor.toFixed(2)}
+                </Text>
+              </View>
+            )}
+
+            {processando ? (
+              <ActivityIndicator size="large" color="#00BCD4" style={styles.modalLoader} />
+            ) : (
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.modalButtonCancel]}
+                  onPress={() => {
+                    setShowConfirmModal(false);
+                    setSelectedMensalidade(null);
+                  }}
+                >
+                  <Text style={styles.modalButtonTextCancel}>Cancelar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.modalButtonConfirm]}
+                  onPress={confirmarPagamento}
+                >
+                  <Text style={styles.modalButtonTextConfirm}>Confirmar</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
