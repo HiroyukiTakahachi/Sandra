@@ -69,6 +69,8 @@ export default function MensalidadesScreen() {
   };
 
   const handleMarcarPago = async (mensalidade: Mensalidade) => {
+    console.log('handleMarcarPago chamado', mensalidade);
+    
     if (mensalidade.pago) {
       Alert.alert('Atenção', 'Esta mensalidade já foi paga');
       return;
@@ -83,6 +85,12 @@ export default function MensalidadesScreen() {
           text: 'Confirmar',
           onPress: async () => {
             try {
+              console.log('Enviando pagamento para API:', {
+                aluno_id: mensalidade.aluno_id,
+                mes_ano: mesAtual,
+                url: `${API_URL}/api/mensalidades/pagar`
+              });
+              
               const response = await fetch(`${API_URL}/api/mensalidades/pagar`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -92,10 +100,16 @@ export default function MensalidadesScreen() {
                 }),
               });
 
+              console.log('Resposta da API:', response.status, response.ok);
+              
               if (response.ok) {
+                const result = await response.json();
+                console.log('Resultado:', result);
                 Alert.alert('Sucesso', 'Pagamento registrado');
                 fetchMensalidades();
               } else {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('Erro na resposta:', errorData);
                 Alert.alert('Erro', 'Não foi possível registrar o pagamento');
               }
             } catch (error) {
