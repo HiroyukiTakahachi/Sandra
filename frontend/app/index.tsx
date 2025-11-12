@@ -87,14 +87,12 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 40,
+    width: '100%',
   },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#00BCD4',
-    marginTop: 16,
-    letterSpacing: 2,
+  logoImage: {
+    width: 280,
+    height: 280,
   },
   buttonsContainer: {
     width: '100%',
