@@ -112,16 +112,21 @@ export default function MensalidadesScreen() {
       if (response.ok) {
         const result = await response.json();
         console.log('Resultado:', result);
+        
+        // Fechar modal e atualizar lista
         setShowConfirmModal(false);
         setSelectedMensalidade(null);
+        await fetchMensalidades();
         
-        if (Platform.OS === 'web') {
-          alert('Pagamento registrado com sucesso!');
-        } else {
-          Alert.alert('Sucesso', 'Pagamento registrado');
-        }
-        
-        fetchMensalidades();
+        // Mostrar mensagem de sucesso
+        setTimeout(() => {
+          if (Platform.OS === 'web') {
+            // No web, usar alert nativo do browser apenas se necessário
+            console.log('✅ Pagamento registrado com sucesso!');
+          } else {
+            Alert.alert('Sucesso', 'Pagamento registrado');
+          }
+        }, 100);
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('Erro na resposta:', errorData);
