@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -22,8 +23,11 @@ export default function HomeScreen() {
       <View style={styles.content}>
         {/* Logo */}
         <View style={styles.logoContainer}>
-          <MaterialCommunityIcons name="dumbbell" size={120} color="#00BCD4" />
-          <Text style={styles.logoText}>GYM ADMIN</Text>
+          <Image
+            source={require('../assets/images/sandra_logo.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Botões */}
