@@ -207,6 +207,16 @@ async def listar_mensalidades(mes_ano: str):
 
 @api_router.put("/mensalidades/pagar")
 async def marcar_pago(pagamento: MensalidadePagamento):
+    # Se data_pagamento foi fornecida, usar ela; caso contrário, usar data atual
+    if pagamento.data_pagamento:
+        try:
+            # Converter string YYYY-MM-DD para datetime
+            data_pag = datetime.strptime(pagamento.data_pagamento, '%Y-%m-%d')
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Formato de data inválido. Use YYYY-MM-DD")
+    else:
+        data_pag = datetime.utcnow()
+    
     result = await db.mensalidades.update_one(
         {
             'aluno_id': pagamento.aluno_id,
@@ -215,7 +225,7 @@ async def marcar_pago(pagamento: MensalidadePagamento):
         {
             '$set': {
                 'pago': True,
-                'data_pagamento': datetime.utcnow()
+                'data_pagamento': data_pag
             }
         }
     )
