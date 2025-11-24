@@ -85,6 +85,10 @@ export default function MensalidadesScreen() {
     }
 
     setSelectedMensalidade(mensalidade);
+    // Definir data atual como padrão (formato YYYY-MM-DD)
+    const hoje = new Date();
+    const dataFormatada = format(hoje, 'yyyy-MM-dd');
+    setDataPagamento(dataFormatada);
     setShowConfirmModal(true);
   };
 
