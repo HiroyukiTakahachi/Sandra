@@ -109,6 +109,7 @@ export default function MensalidadesScreen() {
         body: JSON.stringify({
           aluno_id: selectedMensalidade.aluno_id,
           mes_ano: mesAtual,
+          data_pagamento: dataPagamento,
         }),
       });
 
