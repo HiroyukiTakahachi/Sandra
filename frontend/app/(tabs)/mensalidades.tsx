@@ -267,12 +267,25 @@ export default function MensalidadesScreen() {
             <Text style={styles.modalTitle}>Confirmar Pagamento</Text>
             
             {selectedMensalidade && (
-              <View style={styles.modalInfo}>
-                <Text style={styles.modalAluno}>{selectedMensalidade.aluno_nome}</Text>
-                <Text style={styles.modalValor}>
-                  R$ {selectedMensalidade.valor.toFixed(2)}
-                </Text>
-              </View>
+              <>
+                <View style={styles.modalInfo}>
+                  <Text style={styles.modalAluno}>{selectedMensalidade.aluno_nome}</Text>
+                  <Text style={styles.modalValor}>
+                    R$ {selectedMensalidade.valor.toFixed(2)}
+                  </Text>
+                </View>
+
+                <View style={styles.modalDateContainer}>
+                  <Text style={styles.modalDateLabel}>Data do Pagamento:</Text>
+                  <TextInput
+                    style={styles.modalDateInput}
+                    value={dataPagamento}
+                    onChangeText={setDataPagamento}
+                    placeholder="AAAA-MM-DD"
+                    placeholderTextColor="#999"
+                  />
+                </View>
+              </>
             )}
 
             {processando ? (
