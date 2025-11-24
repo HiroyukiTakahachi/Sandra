@@ -70,6 +70,7 @@ class Mensalidade(BaseModel):
 class MensalidadePagamento(BaseModel):
     aluno_id: str
     mes_ano: str
+    data_pagamento: Optional[str] = None  # formato: YYYY-MM-DD
 
 class Relatorio(BaseModel):
     mes_ano: str
