@@ -34,6 +34,7 @@ export default function MensalidadesScreen() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedMensalidade, setSelectedMensalidade] = useState<Mensalidade | null>(null);
   const [processando, setProcessando] = useState(false);
+  const [dataPagamento, setDataPagamento] = useState('');
 
   useEffect(() => {
     // Definir mês atual no formato YYYY-MM
