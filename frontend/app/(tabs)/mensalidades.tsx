@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Modal,
   Platform,
+  TextInput,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
